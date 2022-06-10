@@ -1,12 +1,12 @@
 from flask import Flask, request, Response
 import dbhandler as dbh
+import Endpoints.users as users
 import sys
 app = Flask(__name__)
 
 
 # Setting up an authenticator function that will run before all endpoints to see if user is authenticated with the correct logintoken
 # Before requests that are decorated with @authenticate, this will grab the login token from the cookie and verify the logintoken exists and is valid. If so it continues on to the endpoint requested, if not it errors before getting to the endpoint
-
 
 @app.before_request
 def validate_token():
@@ -23,6 +23,13 @@ def validate_token():
 def authenticate(endpoint):
     endpoint.must_authenticate = True
     return endpoint
+
+## USER ENDPOINT ##
+
+
+@app.post('/api/users')
+def post_user():
+    return users.post()
 
 
 # Checking to see if a mode was passed to the script

@@ -2,17 +2,20 @@ import mariadb as db
 import dbhandler as dbh
 import traceback
 
+# Function to create a new user. Requires username and email, and hashed password plus salt to be stored.
+
 
 def post_user(email, username, pass_hash, salt):
     user = []
     conn, cursor = dbh.db_connect()
     try:
-        # Inserting a new user into the DB with the values from the arguments and then commit
+        # Inserting a new user into the DB
         cursor.execute(
             "INSERT INTO users (email, username, password, salt) VALUES (?, ?, ?, ?)", [email, username, pass_hash, salt])
         conn.commit()
-        # After creating the user in the DB, we pass in information to the user login endpoint to also log the user in after creation, creating a login token.
-        user = ul.post_login(email, None, pass_hash)
+        # After creating the user in the DB, we pass in information to the user login endpoint to also log the user in, creating a login token.
+        # TODO make a login function that will log a user in.
+        # user = ul.post_login(email, None, pass_hash)
         # Saving the login token to a variable
         login_token = user[1]['loginToken']
         # Run a select statement to get data on the newly created user, save it to a variable and then change to an object, with the logintoken aswell. before disconnecting and returning the data

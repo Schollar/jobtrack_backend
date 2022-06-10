@@ -1,7 +1,7 @@
 import mariadb as db
 import dbhandler as dbh
 import traceback
-import userLogin as ul
+import Interactions.userLogin as ul
 
 # Function to create a new user. Requires username and email, and hashed password plus salt to be stored.
 

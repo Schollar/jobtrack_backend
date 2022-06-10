@@ -43,3 +43,29 @@ def post_user(email, username, pass_hash, salt):
         return False, None
     else:
         return True, user
+
+# Function to delete a login token(log a user out)
+
+
+def delete_login(loginToken):
+    conn, cursor = dbh.db_connect()
+    try:
+        # Delete statement, commit disconnect and return true
+        cursor.execute(
+            "DELETE FROM user_session WHERE logintoken = ? ", [loginToken])
+        conn.commit()
+        rowcount = cursor.rowcount
+    except db.OperationalError:
+        traceback.print_exc()
+        print('Something went  wrong with the db!')
+    except db.ProgrammingError:
+        traceback.print_exc()
+        print('Error running DB query')
+    except:
+        traceback.print_exc()
+        print("Something unexpected went wrong")
+    dbh.db_disconnect(conn, cursor)
+    if(rowcount < 1):
+        return False
+    else:
+        return True
